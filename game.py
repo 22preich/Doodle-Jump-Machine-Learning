@@ -14,11 +14,16 @@ class Game:
         self.active_field = self.base_field.copy()
         self.reward = 0
         self.up_frame_left = 7
+        self.frames = 0
 
     def _step(self, action):
+        self.frames += 1
+        while self.frames <= 10:
+            self.base_field.update()
+            self.frames+=1
         print(action)  # main function
 
-        if self.y >= 19:
+        if self.y >= 20 or self.y < 0:
             return False
             print("Game Over")
         else:

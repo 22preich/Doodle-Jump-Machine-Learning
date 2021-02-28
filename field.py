@@ -17,7 +17,7 @@ class Field:
         self.platform_width = 3
         self.platform_needed = True
         self.platform = self.generate_platform()
-        self.layers_per_platform = 4
+        self.layers_per_platform = 6
         self.platform_gap = self.layers_per_platform
 
 
