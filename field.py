@@ -14,7 +14,7 @@ class Field:
 
         self.field = np.zeros((self.col_height, self.row_width), dtype=int)
         
-        self.platform_width = 3
+        self.platform_width = 4
         self.platform_needed = True
         self.platform = self.generate_platform()
         self.layers_per_platform = 6
@@ -32,10 +32,10 @@ class Field:
         if self.platform_gap == self.layers_per_platform:
             self.field = np.insert(self.field, 0, self.generate_platform(), 0)
         else: 
-            if self.coin_random():
-                self.field = np.insert(self.field, 0, self.generate_coin(), 0)
-            else:
-                self.field = np.insert(self.field, 0, np.zeros(self.row_width), 0)
+            #if self.coin_random():
+            #    pass # self.field = np.insert(self.field, 0, self.generate_coin(), 0)
+            #else:
+            self.field = np.insert(self.field, 0, np.zeros(self.row_width), 0)
 
         self.platform_gap-=1
 
@@ -58,7 +58,7 @@ class Field:
         platform = np.zeros(self.row_width)
         platform_start = random.randrange(0, self.row_width-self.platform_width)
         for i in range(platform_start, platform_start + self.platform_width):
-            platform[i] = 3
+            platform[i] = 1
 
         return platform
 
@@ -75,7 +75,7 @@ class Field:
     def color(self, n):
         if np.equal(n, 0):
             return (0, 0, 0)
-        if np.equal(n, 3):
+        if np.equal(n, 1):
             return (255, 255, 255)
         if np.equal(n, 4):
             return (0, 255, 255)

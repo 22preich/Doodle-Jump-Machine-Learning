@@ -2,3 +2,6 @@
 __pycache__/*
 *.iml
 .DS_Store
+/policies/
+/artifacts/
+/test.mp4
