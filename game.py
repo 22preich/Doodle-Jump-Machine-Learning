@@ -17,13 +17,13 @@ class Game(py_environment.PyEnvironment):
             shape=(20, 12), dtype=np.int32, minimum=0, name='observation')
 
         self.x = 6
-        self.y = 9
-        self.is_going_up = True
+        self.y = 6
+        self.is_going_up = False
         self.bump_platform = False
         self.base_field = Field()
         self.active_field = self.base_field.copy()
         self.reward = 0
-        self.up_frame_left = 7
+        self.up_frame_left = 8
         self.frames = 0
 
         self._step_count = 0
@@ -50,14 +50,23 @@ class Game(py_environment.PyEnvironment):
 
         self.moving_sideways(action)
 
-        if self.y >= 20 or self.y < 0:
-            return ts.termination(self.active_field, -200)
+        if self.y >= 20:
+            return ts.termination(self.active_field, -100)
         else:
             # print(self.reward + 1)
             self.base_field.update()
             self.active_field = self.base_field.copy()
+            if self.y == 0:
+                while self.y < 7:
+                    self.base_field.update()
+                    self.y += 1
+                self.active_field = self.base_field.copy()
+                self.reward += 100
             self.jump()
-            self.reward += 20 - self.x
+            # self.reward += 1  # with jump: bad; jump + edge: worse; j edge: bad
+            self.reward += (10 - self.x) # decent
+            # self.reward = 10 if self.is_going_up else -10  # eh
+            # self.reward = -5 if self.x == 0 or self.x == 11 else 0
             return ts.transition(self.active_field, reward=self.reward, discount=1.0)
 
     def create_color(self, number):
@@ -86,10 +95,10 @@ class Game(py_environment.PyEnvironment):
 
         self.active_field[self.y][self.x] += 2
 
-        if self.is_going_up == False and 3 in self.active_field:
+        if 3 in self.active_field:
             self.is_going_up = True
-            # self.reward += 10
-            self.up_frame_left = 7
+            # self.reward += 20 # by itself: really bad
+            self.up_frame_left = 8
 
         if self.is_going_up:
             self.y -= 1
@@ -114,10 +123,10 @@ class Game(py_environment.PyEnvironment):
     def _reset(self):
         self._step_count = 0
         self.frames = 0
-        self.is_going_up = True
+        self.is_going_up = False
         self.up_frame_left = 7
         self.x = 6
-        self.y = 7
+        self.y = 6
         self.field = Field()
         self._episode_ended = False
         self.active_field = self.field.copy()

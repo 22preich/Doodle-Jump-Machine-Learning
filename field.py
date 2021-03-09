@@ -2,8 +2,8 @@ import numpy as np
 
 import random
 
-class Field:
 
+class Field:
 
     def __init__(self):
         self.row_width = 12
@@ -56,7 +56,7 @@ class Field:
 
     def generate_platform(self):
         platform = np.zeros(self.row_width)
-        platform_start = random.randrange(0, self.row_width-self.platform_width)
+        platform_start = random.randrange(2, self.row_width-self.platform_width-2)
         for i in range(platform_start, platform_start + self.platform_width):
             platform[i] = 1
 
