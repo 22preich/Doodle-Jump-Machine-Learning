@@ -58,7 +58,7 @@ if __name__ == '__main__':
     train_env = tf_py_environment.TFPyEnvironment(Game())
     eval_env = tf_py_environment.TFPyEnvironment(Game())
 
-    num_iterations = 100000  # @param {type:"integer"}
+    num_iterations = 150000  # @param {type:"integer"}
 
     initial_collect_steps = 200  # @param {type:"integer"}
     collect_steps_per_iteration = 1  # @param {type:"integer"}
@@ -66,9 +66,10 @@ if __name__ == '__main__':
 
     batch_size = 64  # @param {type:"integer"}
     learning_rate = 1e-3  # @param {type:"number"}
+    learning_rate = tf.keras.optimizers.schedules.InverseTimeDecay(1e-4, decay_steps=1000, decay_rate=1)
     log_interval = 2000  # @param {type:"integer"}
 
-    num_eval_episodes = 10  # @param {type:"integer"}
+    num_eval_episodes = 20  # @param {type:"integer"}
     eval_interval = 5000  # @param {type:"integer"}
 
     fc_layer_params = (20, 12)
@@ -78,7 +79,7 @@ if __name__ == '__main__':
         train_env.action_spec(),
         fc_layer_params=fc_layer_params)
 
-    optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 
     train_step_counter = tf.Variable(0)
 

@@ -44,7 +44,7 @@ class Game(py_environment.PyEnvironment):
 
         self.frames += 1
         self._step_count += 1
-        while self.frames <= 10:
+        while self.frames <= 13:
             self.base_field.update()
             self.frames += 1
 
@@ -57,17 +57,17 @@ class Game(py_environment.PyEnvironment):
             self.base_field.update()
             self.active_field = self.base_field.copy()
             if self.y == 0:
-                while self.y < 7:
+                while self.y < 6:
                     self.base_field.update()
                     self.y += 1
                 self.active_field = self.base_field.copy()
                 self.reward += 100
             self.jump()
             # self.reward += 1  # with jump: bad; jump + edge: worse; j edge: bad
-            self.reward += (10 - self.x) # decent
-            # self.reward = 10 if self.is_going_up else -10  # eh
-            # self.reward = -5 if self.x == 0 or self.x == 11 else 0
-            return ts.transition(self.active_field, reward=self.reward, discount=1.0)
+            # self.reward += (10 - self.x)  # decent
+            # self.reward += 10 if self.is_going_up else 0  # eh
+            # self.reward += -5 if self.x == 0 or self.x == 11 else 0
+            return ts.transition(self.active_field, reward=self.reward, discount=1)
 
     def create_color(self, number):
         if np.equal(number, 0):
@@ -97,7 +97,7 @@ class Game(py_environment.PyEnvironment):
 
         if 3 in self.active_field:
             self.is_going_up = True
-            # self.reward += 20 # by itself: really bad
+            # self.reward += 1  # by itself: really bad
             self.up_frame_left = 8
 
         if self.is_going_up:

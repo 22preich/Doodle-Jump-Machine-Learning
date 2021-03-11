@@ -2,7 +2,6 @@ import numpy as np
 
 import random
 
-
 class Field:
 
     def __init__(self):
@@ -64,7 +63,6 @@ class Field:
 
     def copy(self):
         return self.field.copy()
-
 
     def __str__(self):
         return self.__repr__()
