@@ -58,14 +58,14 @@ if __name__ == '__main__':
     train_env = tf_py_environment.TFPyEnvironment(Game())
     eval_env = tf_py_environment.TFPyEnvironment(Game())
 
-    num_iterations = 150000  # @param {type:"integer"}
+    num_iterations = 50000  # @param {type:"integer"}
 
     initial_collect_steps = 200  # @param {type:"integer"}
     collect_steps_per_iteration = 1  # @param {type:"integer"}
     replay_buffer_max_length = 100000  # @param {type:"integer"}
 
     batch_size = 64  # @param {type:"integer"}
-    learning_rate = 1e-3  # @param {type:"number"}
+    # learning_rate = 1e-3  # @param {type:"number"}
     learning_rate = tf.keras.optimizers.schedules.InverseTimeDecay(1e-4, decay_steps=1000, decay_rate=1)
     log_interval = 2000  # @param {type:"integer"}
 

@@ -17,7 +17,7 @@ class Game(py_environment.PyEnvironment):
             shape=(20, 12), dtype=np.int32, minimum=0, name='observation')
 
         self.x = 6
-        self.y = 6
+        self.y = 2
         self.is_going_up = False
         self.bump_platform = False
         self.base_field = Field()
@@ -61,7 +61,7 @@ class Game(py_environment.PyEnvironment):
                     self.base_field.update()
                     self.y += 1
                 self.active_field = self.base_field.copy()
-                self.reward += 100
+                # self.reward += 100
             self.jump()
             # self.reward += 1  # with jump: bad; jump + edge: worse; j edge: bad
             # self.reward += (10 - self.x)  # decent
@@ -97,7 +97,7 @@ class Game(py_environment.PyEnvironment):
 
         if 3 in self.active_field:
             self.is_going_up = True
-            # self.reward += 1  # by itself: really bad
+            self.reward += 10  # by itself: really bad
             self.up_frame_left = 8
 
         if self.is_going_up:
@@ -126,7 +126,7 @@ class Game(py_environment.PyEnvironment):
         self.is_going_up = False
         self.up_frame_left = 7
         self.x = 6
-        self.y = 6
+        self.y = 2
         self.field = Field()
         self._episode_ended = False
         self.active_field = self.field.copy()
