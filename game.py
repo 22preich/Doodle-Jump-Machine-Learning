@@ -37,6 +37,7 @@ class Game(py_environment.PyEnvironment):
         if self.limit and self._step_count > 10000:
             self._episode_ended = True
             reward = 100
+            print("water")
             return ts.termination(self.active_field, reward)
 
         if self._episode_ended:
@@ -49,25 +50,27 @@ class Game(py_environment.PyEnvironment):
             self.frames += 1
 
         self.moving_sideways(action)
-
-        if self.y >= 20:
-            return ts.termination(self.active_field, -100)
-        else:
-            # print(self.reward + 1)
-            self.base_field.update()
+        self.jump()
+    # print(self.reward + 1)
+        self.base_field.update()
+        self.active_field = self.base_field.copy()
+        if self.y == 0:
+            while self.y < 6:
+                self.base_field.update()
+                self.y += 1
             self.active_field = self.base_field.copy()
-            if self.y == 0:
-                while self.y < 6:
-                    self.base_field.update()
-                    self.y += 1
-                self.active_field = self.base_field.copy()
-                # self.reward += 100
-            self.jump()
-            # self.reward += 1  # with jump: bad; jump + edge: worse; j edge: bad
-            # self.reward += (10 - self.x)  # decent
-            # self.reward += 10 if self.is_going_up else 0  # eh
-            # self.reward += -5 if self.x == 0 or self.x == 11 else 0
-            return ts.transition(self.active_field, reward=self.reward, discount=1)
+            # self.reward += 100
+
+        self.active_field[self.y][self.x] += 2
+
+        if (self.y >= 17):
+            self._episode_ended = True
+            return ts.termination(self.active_field, -100)
+        self.reward += 1  # with jump: bad; jump + edge: worse; j edge: bad
+        # self.reward += (10 - self.x)  # decent
+        # self.reward += 10 if self.is_going_up else 0  # eh
+        # self.reward += -5 if self.x == 0 or self.x == 11 else 0
+        return ts.transition(self.active_field, reward=self.reward, discount=1)
 
     def create_color(self, number):
         if np.equal(number, 0):
@@ -92,12 +95,9 @@ class Game(py_environment.PyEnvironment):
         return render
 
     def jump(self):
-
-        self.active_field[self.y][self.x] += 2
-
         if 3 in self.active_field:
             self.is_going_up = True
-            self.reward += 10  # by itself: really bad
+            # self.reward += 10  # by itself: really bad
             self.up_frame_left = 8
 
         if self.is_going_up:
